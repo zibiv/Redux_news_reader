@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-
+//Thunk action creator для загрузки конкретной статьи из API
 export const loadCurrentArticle = createAsyncThunk(
   'currentArticle/loadCurrentArticle',
   async (articleId) => {
@@ -34,8 +34,10 @@ export const currentArticleSlice = createSlice({
       })
   },
 });
-
+//СЕЛЕКТОРЫ
+//получение данной статьи из хранилища
 export const selectCurrentArticle = (state) => state.currentArticle.article;
+//получения статуса загрузки статьи
 export const isLoadingCurrentArticle = (state) => state.currentArticle.isLoadingCurrentArticle;
 
 export default currentArticleSlice.reducer;
