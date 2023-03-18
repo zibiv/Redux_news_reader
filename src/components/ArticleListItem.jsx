@@ -1,5 +1,5 @@
 import React from 'react';
-
+//компонент для конкретного превью статьи
 export default function ArticleListItem({ article }) {
   return (
     <button key={article.id} className='article-container'>
