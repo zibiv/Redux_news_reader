@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-// import {
-//   loadCommentsForArticleId,
-//   selectComments,
-//   isLoadingComments,
-// } from './commentsSlice';
+import {
+  loadCommentsForArticleId,
+  selectComments,
+  isLoadingComments,
+} from './commentsSlice';
 import { selectCurrentArticle } from '../currentsArticle/currentArticleSlice';
 import CommentList from '../../components/CommentList';
 import CommentForm from '../../components/CommentForm';
