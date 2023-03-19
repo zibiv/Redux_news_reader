@@ -10,7 +10,21 @@ export const loadCommentsForArticleId = createAsyncThunk(
   }
 );
 // Create postCommentForArticleId here.
-
+export const postCommentForArticleId = createAsyncThunk(
+  'comments/postCommentForArticleId',
+  async ({ articleId, commentToPost }) => {
+    const comment = await fetch(`/api/articles/${articleId}/comments`, {
+      method: "POST",
+      cache: "no-cache",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({comment: commentToPost})
+    });
+    const json = await comment.json();
+    return json;
+  }
+);
 export const commentsSlice = createSlice({
   name: 'comments',
   initialState: {
@@ -19,11 +33,14 @@ export const commentsSlice = createSlice({
     byArticleId: {},
     isLoadingComments: false,
     failedToLoadComments: false,
+    createCommentIsPending: false,
+    failedToCreateComment: false,
   },
   // Add extraReducers here.
   extraReducers: (builder) => {
     builder.addCase(loadCommentsForArticleId.fulfilled, (state, action)=>{
       state.isLoadingComments = false;
+      failedToLoadComments: false;
       //передача в хранилище, ключа id стаьи : массив комментариев к этой статье
       state.byArticleId[action.payload.articleId] = action.payload.comments;
     })
@@ -36,11 +53,24 @@ export const commentsSlice = createSlice({
       state.isLoadingComments = false;
       state.byArticleId = {};
     })
+    .addCase(postCommentForArticleId.fulfilled, (state, action)=>{
+      state.createCommentIsPending = false;
+      state.failedToCreateComment = false;
+      state.byArticleId[action.payload.articleId].push(action.payload);
+    })
+    .addCase(postCommentForArticleId.pending, state => {
+      state.createCommentIsPending = true;
+      state.failedToCreateComment = false;
+    })
+    .addCase(postCommentForArticleId.rejected, state => {
+      state.failedToCreateComment = true;
+      state.createCommentIsPending = false;
+    })
   }
 });
 
 //селекторы
-//получение комментария для конкретной статьи
+//получение всех загруженных комментариев
 export const selectComments = (state) => state.comments.byArticleId;
 //статус загрузки комментария
 export const isLoadingComments = (state) => state.comments.isLoadingComments;
