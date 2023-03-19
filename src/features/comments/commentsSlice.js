@@ -15,8 +15,28 @@ export const commentsSlice = createSlice({
   name: 'comments',
   initialState: {
     // Add initial state properties here.
+    //комментарии будут хранится все вместе в виде idстатьи : комментарии к статье[], добавляясь в хранилище по мере потребности
+    byArticleId: {},
+    isLoadingComments: false,
+    failedToLoadComments: false,
   },
   // Add extraReducers here.
+  extraReducers: (builder) => {
+    builder.addCase(loadCommentsForArticleId.fulfilled, (state, action)=>{
+      state.isLoadingComments = false;
+      //передача в хранилище, ключа id стаьи : массив комментариев к этой статье
+      state.byArticleId[action.payload.articleId] = action.payload.comments;
+    })
+    .addCase(loadCommentsForArticleId.pending, state => {
+      state.isLoadingComments = true;
+      state.failedToLoadComments = false;
+    })
+    .addCase(loadCommentsForArticleId.rejected, state => {
+      state.failedToLoadComments = true;
+      state.isLoadingComments = false;
+      state.byArticleId = {};
+    })
+  }
 });
 
 //селекторы
