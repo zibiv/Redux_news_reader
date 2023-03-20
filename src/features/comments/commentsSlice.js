@@ -19,7 +19,10 @@ export const postCommentForArticleId = createAsyncThunk(
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({comment: commentToPost})
+      body: JSON.stringify({
+        articleId:articleId,
+        comment: commentToPost
+      })
     });
     const json = await comment.json();
     return json;
