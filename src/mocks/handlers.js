@@ -53,11 +53,12 @@ export const handlers = [
   }),
   rest.post('/api/articles/:articleId/comments', (req, res, ctx) => {
     mockDelay(500);
+    console.log(req.body);
     const { articleId } = req.params;
     const commentResponse = {
       id: commentsData.length,
       articleId: parseInt(articleId),
-      text: JSON.parse(req.body).comment,
+      text: req.body.comment,
     };
 
     if (userComments[articleId]) {
