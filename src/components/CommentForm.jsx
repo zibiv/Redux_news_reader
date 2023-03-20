@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   createCommentIsPending,
+  postCommentForArticleId
 } from '../features/comments/commentsSlice';
 
 export default function CommentForm({ articleId }) {
@@ -9,16 +10,20 @@ export default function CommentForm({ articleId }) {
   const [comment, setComment] = useState('');
   
   // Declare isCreatePending here.
-
+  const isCreatePending = useSelector(createCommentIsPending);
   const handleSubmit = (e) => {
     e.preventDefault();
     // dispatch your asynchronous action here!
+    dispatch(postCommentForArticleId({
+      articleId: articleId,
+      commentToPost: comment
+    }))
     setComment('');
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <label for='comment' className='label'>
+      <label htmlFor='comment' className='label'>
         Add Comment:
       </label>
       <div id='input-container'>
@@ -31,6 +36,7 @@ export default function CommentForm({ articleId }) {
         <button
           
           className='comment-button'
+          disabled={isCreatePending}
         >
           Submit
         </button>

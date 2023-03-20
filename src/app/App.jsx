@@ -11,7 +11,6 @@ function App() {
       <main>
         <div className='current-article'>
           <CurrentArticle />
-          //комментарии должны загружаться к конкретной статье
           <Comments />
         </div>
         <ArticlePreviews />
