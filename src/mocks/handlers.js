@@ -1,7 +1,7 @@
 import { rest } from 'msw';
 import articlesData from './articles.json';
 import commentsData from './comments.json';
-
+//комментарии пользователя хранятся локально в этой переменной
 const userComments = {};
 
 function mockDelay(milliseconds) {
@@ -47,11 +47,13 @@ export const handlers = [
         articleId: parseInt(articleId),
         comments: commentsData
           .filter((comment) => comment.articleId === parseInt(articleId))
+          //комментарии пользователя которых нет в json файле, добавляются этом месте к тем которые были отфильтрованы из json
           .concat(userCommentsForArticle),
       })
     );
   }),
   rest.post('/api/articles/:articleId/comments', (req, res, ctx) => {
+    console.log(userComments);
     mockDelay(500);
     console.log(req.body);
     const { articleId } = req.params;

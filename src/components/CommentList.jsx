@@ -8,8 +8,8 @@ export default function CommentList({ comments }) {
   
   return (
     <ul className='comments-list'>
-      {comments.map( comment => {
-        return <Comment key={comment.id} comment={comment}/>;
+      {comments.map( (comment, id) => {
+        return <Comment key={id} comment={comment}/>;
       })}
     </ul>
   );
